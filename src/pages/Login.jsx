@@ -7,6 +7,7 @@ const Login = ({toggleSignup}) => {
         const [ email, setEmail ] = useState("");
         const [ password, setPassword ] = useState("");
         const navigate = useNavigate();
+
         const handleLogin = (e) =>  {
             e.preventDefault();
             if ( email === "mpbjain@gmail.com" && password === "12345"){
@@ -22,13 +23,13 @@ const Login = ({toggleSignup}) => {
             <Form>
                 <Form.Group className="mb-3">
                     <Form.Label>Email</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" />
+                    <Form.Control type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter email" />
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Enter password" />
+                    <Form.Control type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter password" />
                 </Form.Group>
-                <Button variant="primary" className="w-100">
+                <Button variant="primary" className="w-100" onClick={handleLogin}>
                     Login
                 </Button>
                 <p className="text-center mt-3">
