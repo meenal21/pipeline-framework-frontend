@@ -3,9 +3,8 @@ import { Navbar, Nav, Container, Button } from "react-bootstrap";
 
 const NavbarCustom = () => {
     return (
-        <div>
-            <Navbar expand="lg" bg="dark" variant="dark" className="shadow-sm">
-                <Container>
+            <Navbar expand="md" bg="dark" variant="dark" className="shadow-sm">
+                <Container fluid className="px-3">
                     {/* Brand Logo */}
                     <Navbar.Brand as={Link} to="/">MyWebsite</Navbar.Brand>
 
@@ -20,7 +19,6 @@ const NavbarCustom = () => {
                     </Navbar.Collapse>
                 </Container>            
             </Navbar>
-        </div>
     );
 };
 

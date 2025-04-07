@@ -3,7 +3,7 @@ import { Button, Offcanvas, Container } from "react-bootstrap";
 import Login from "./Login";
 import SignUp from "./SignUp";
 
-const Home = () => {
+const Landing = () => {
     const [showAuth, setShowAuth] = useState(false);
     const [isLogin, setIsLogin] = useState(true);
   
@@ -36,4 +36,4 @@ const Home = () => {
     );
   };
   
-  export default Home;
+  export default Landing;

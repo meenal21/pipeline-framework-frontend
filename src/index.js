@@ -9,7 +9,8 @@ import SignUpUI from './pages/SignUp';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Layout from './pages/Layout';
-import Home from './pages/Home';
+import Landing from './pages/Landing';
+import HomePage from './pages/HomePage';
 
 const router = createBrowserRouter([
   {
@@ -19,11 +20,15 @@ const router = createBrowserRouter([
     children: [
         {
           path: "/", 
-          element: <Home/>,
+          element: <Landing/>,
          },
         {
           path: "/login",
           element: <Login />
+        },
+        {
+          path: "/home",
+          element: <HomePage />
         },
         {
           path: "/createpipeline",
