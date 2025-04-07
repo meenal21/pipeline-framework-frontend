@@ -1,16 +1,36 @@
 import { Link } from "react-router-dom";
+import { Form, Button } from "react-bootstrap";
 
-const SignUpUI = ({ handleSubmit, handleChange }) => (
-  <div className="signup-container">
-    <h2>Sign Up</h2>
-    <form onSubmit={handleSubmit}>
-      <input type="text" name="name" placeholder="Name" onChange={handleChange} required />
-      <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-      <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
-      <button type="submit">Sign Up</button>
-    </form>
-    <p>Already have an account? <Link to="/login">Login here</Link></p>
-  </div>
-);
+const SignUp = ({ toggleLogin }) => {
+  return (
+    <Form>
+      <Form.Group className="mb-3">
+        <Form.Label>Full Name</Form.Label>
+        <Form.Control type="text" placeholder="Enter full name" />
+      </Form.Group>
+      <Form.Group className="mb-3">
+        <Form.Label>Email</Form.Label>
+        <Form.Control type="email" placeholder="Enter email" />
+      </Form.Group>
+      <Form.Group className="mb-3">
+        <Form.Label>Password</Form.Label>
+        <Form.Control type="password" placeholder="Create a password" />
+      </Form.Group>
+      <Button variant="success" className="w-100">
+        Sign Up
+      </Button>
+      <p className="text-center mt-3">
+        Already have an account?{" "}
+        <span
+          className="text-primary"
+          style={{ cursor: "pointer" }}
+          onClick={toggleLogin}
+        >
+          Login
+        </span>
+      </p>
+    </Form>
+  );
+};
 
-export default SignUpUI;
+export default SignUp;

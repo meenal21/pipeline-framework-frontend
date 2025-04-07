@@ -2,24 +2,25 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './app/App';
-import Nav from './app/Navbar'
 import Login from './pages/Login'
 import CreatePipeline from './pages/CreatePipeline';
 import reportWebVitals from './reportWebVitals';
 import SignUpUI from './pages/SignUp';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import Layout from './pages/Layout';
+import Home from './pages/Home';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Nav />, // root layout - and can contain children
+    element: <Layout />, // root layout - and can contain children
     errorElement: <div>404 not found</div>,
     children: [
-        // {
-        //   path: "/home", 
-        //   element: <Landing />,
-        //   errorElement: <ErrorPage />
-        //  },
+        {
+          path: "/", 
+          element: <Home/>,
+         },
         {
           path: "/login",
           element: <Login />

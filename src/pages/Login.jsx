@@ -1,7 +1,8 @@
 import { useState }  from "react";
 import { useNavigate } from 'react-router-dom'
+import { Form, Button } from "react-bootstrap";
 
-const Login = () => {
+const Login = ({toggleSignup}) => {
 
         const [ email, setEmail ] = useState("");
         const [ password, setPassword ] = useState("");
@@ -18,21 +19,30 @@ const Login = () => {
             }
         };
         return (
-            <div>
-                <h2>
+            <Form>
+                <Form.Group className="mb-3">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control type="email" placeholder="Enter email" />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="password" placeholder="Enter password" />
+                </Form.Group>
+                <Button variant="primary" className="w-100">
                     Login
-                </h2>
-                <form onSubmit={handleLogin}>
-                    <input
-                        type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <input
-                        type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <button type='submit'>Login</button>
-                </form>
-            </div>
-        )
+                </Button>
+                <p className="text-center mt-3">
+                    Don't have an account?{" "}
+                    <span
+                    className="text-primary"
+                    style={{ cursor: "pointer" }}
+                    onClick={toggleSignup}
+                    >
+                    Sign Up
+                    </span>
+                </p>
+            </Form>
+    )
 }
 
 export default Login;
