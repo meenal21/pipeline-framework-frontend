@@ -13,7 +13,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   const handleCreatePipeline = () => {
-    navigate("/create-pipeline");
+    navigate("/createpipeline");
   };
 
   const handleExecutePipeline = (pipeline) => {
