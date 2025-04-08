@@ -15,7 +15,7 @@ const HomePage = () => {
         {/* Left Pane (33%) */}
         <Col md={3}>
           <Card className="p-3 h-100">
-          <Card.Img variant="top" src="/assets/placeholder.jpg" />
+          <Card.Img variant="top" src="${process.env.PUBLIC_URL}/assets/placeholder.jpg" />
           <Card.Body>
             <Card.Title>User Name</Card.Title>
             <Card.Text>
