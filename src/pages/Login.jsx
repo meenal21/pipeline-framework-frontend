@@ -12,7 +12,7 @@ const Login = ({toggleSignup}) => {
             e.preventDefault();
             if ( email === "mpbjain@gmail.com" && password === "12345"){
                 localStorage.setItem("auth", true);
-                navigate("/createpipeline");
+                navigate("/homepage");
                 window.location.reload(); //force reload of nav
             }
             else{
