@@ -7,7 +7,7 @@ const ActionSelector = () => {
 
   // Simulate fetching from JSON file
   useEffect(() => {
-    fetch("${process.env.PUBLIC_URL}/assets/actions.json")
+    fetch(`${process.env.PUBLIC_URL}/assets/actions.json`)
       .then((res) => res.json())
       .then((data) => setCardData(data))
       .catch((err) => console.error("Error loading JSON:", err));
