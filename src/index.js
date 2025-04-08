@@ -6,13 +6,13 @@ import CreatePipeline from './pages/CreatePipeline';
 import reportWebVitals from './reportWebVitals';
 import SignUpUI from './pages/SignUp';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { RouterProvider, createHashRouter } from 'react-router-dom';
 import Layout from './pages/Layout';
 import Landing from './pages/Landing';
 import HomePage from './pages/HomePage';
 import Dashboard from './pages/Dashboard';
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <Layout />, // root layout - and can contain children
