@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './app/App';
 import Login from './pages/Login'
 import CreatePipeline from './pages/CreatePipeline';
 import reportWebVitals from './reportWebVitals';
@@ -11,6 +10,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Layout from './pages/Layout';
 import Landing from './pages/Landing';
 import HomePage from './pages/HomePage';
+import Dashboard from './pages/Dashboard';
 
 const router = createBrowserRouter([
   {
@@ -29,6 +29,10 @@ const router = createBrowserRouter([
         {
           path: "/home",
           element: <HomePage />
+        },
+        {
+          path: "/dashboard",
+          element: <Dashboard />
         },
         {
           path: "/createpipeline",

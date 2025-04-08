@@ -2,6 +2,7 @@ import react, { useState} from "react";
 import FlowChart from "../components/FlowChart";
 import AdjacencyList from "../components/AdjacencyList";
 import {Col, Row, Container} from "react-bootstrap"
+import ActionSelector from "../components/ActionSelector";
 
 
 
@@ -15,28 +16,24 @@ const CreatePipeline = () => {
         setEdges(updatedEdges);
     };
     return (
-        <div style={{ display: "flex", height: "100vh" }}>
-            <Container fluid className="mt-4">
-      <Row style={{ height: "90vh" }}>
+            
+            <Container fluid style={{height: "100vh"}}>
+      <Row style={{height: "100vh"}}>
         {/* Left Pane (33%) */}
         <Col md={3}>
-          <p>some content here</p>
+        <h5>Drag and Drop an action</h5>
+          <ActionSelector/>
         </Col>
 
         {/* Right Pane (66%) with 3 stacked sections */}
         <Col md={6}>
-          <p>some more content</p>
           <FlowChart onGraphUpdate={handleGraphUpdate}/>
         </Col>
         <Col md={3}>
-          <p>some more content</p>
           <AdjacencyList nodes={nodes} edges={edges}/>  
         </Col>
       </Row>
     </Container>
-            
-            
-        </div>
     )
 }
 

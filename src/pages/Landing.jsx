@@ -15,7 +15,7 @@ const Landing = () => {
           Sign up today or log in to get started!
         </p>
   
-        <Button variant="primary" onClick={() => setShowAuth(true)}>
+        <Button variant="dark" onClick={() => setShowAuth(true)}>
           Login / Sign Up
         </Button>
   

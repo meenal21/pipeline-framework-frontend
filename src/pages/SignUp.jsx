@@ -16,7 +16,7 @@ const SignUp = ({ toggleLogin }) => {
         <Form.Label>Password</Form.Label>
         <Form.Control type="password" placeholder="Create a password" />
       </Form.Group>
-      <Button variant="success" className="w-100">
+      <Button variant="dark" className="w-100">
         Sign Up
       </Button>
       <p className="text-center mt-3">

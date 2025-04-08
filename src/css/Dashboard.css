@@ -1,0 +1,111 @@
+/* Overall Dashboard container */
+.dashboard-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 30px;
+    font-family: 'Times New Roman', Times, serif;
+    background-color: #f4f7fc;
+    height: 100vh;
+  }
+  
+  /* Side Panel */
+  .side-panel {
+    width: 25%;
+    padding: 20px;
+    background-color: #8a5b8c;
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    height: 100%;
+  }
+  
+  /* Side Panel Heading */
+  .side-panel h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Main Content Area */
+  .main-content {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  /* Each Section within Main Content */
+  .create-pipeline, .execute-pipeline, .workflow {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Create Pipeline Section */
+  .create-pipeline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #f0f0f0;
+  }
+  
+  .create-pipeline button {
+    padding: 12px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .create-pipeline button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Execute Pipeline Section */
+  .execute-pipeline ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 10px;
+  }
+  
+  .execute-pipeline li {
+    padding: 8px 0;
+    font-size: 16px;
+    color: #333;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Workflow Section */
+  .workflow {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  /* Side Panel User Info */
+  .side-panel p {
+    font-size: 18px;
+    margin: 5px 0;
+  }
+  
+  /* Button Style in the Side Panel */
+  .side-panel .user-info {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  /* Add some hover effects and transitions for smoother feel */
+  .create-pipeline button,
+  .side-panel .user-info button {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .create-pipeline button:hover,
+  .side-panel .user-info button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+  }
+  

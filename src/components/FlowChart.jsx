@@ -164,8 +164,30 @@ const FlowChart = ({onGraphUpdate}) => {
           edgeReconnectSuccessful.current = true;
         }, []);
 
+        
     return (
-        <div style={{ width: '50vw', height: '50vh' , position: 'relative'}}>
+        <div style={{ width: '50vw', height: '50vh' , position: 'relative'}}
+        onDrop={(e) => {
+          e.preventDefault();
+          const reactFlowBounds = e.currentTarget.getBoundingClientRect();
+          const data = JSON.parse(e.dataTransfer.getData("application/reactflow"));
+          const position = {
+            x: e.clientX - reactFlowBounds.left,
+            y: e.clientY - reactFlowBounds.top
+          };
+          const newNode = {
+            id: idCount.toString(),
+            position,
+            data: { label: data.text },
+          };
+          setNodes((nds) => [...nds, newNode]);
+          setIdCount((prev) => prev + 1);
+        }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = "move";
+        }}
+        >
             <button onClick={addNode}>
                 Add Node
             </button>

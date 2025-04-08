@@ -1,0 +1,12 @@
+[
+    { "id": 1, "text": "Extract Data from API" },
+    { "id": 2, "text": "Load to S3 Bucket" },
+    { "id": 3, "text": "Transform with Spark" },
+    { "id": 4, "text": "Run SQL Validation" },
+    { "id": 5, "text": "Train ML Model" },
+    { "id": 6, "text": "Evaluate Model Accuracy" },
+    { "id": 7, "text": "Send Slack Notification" },
+    { "id": 8, "text": "Trigger CI/CD Deployment" },
+    { "id": 9, "text": "Archive to Data Lake" },
+    { "id": 10, "text": "Monitor Pipeline Health" }
+  ]

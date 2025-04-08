@@ -29,7 +29,7 @@ const Login = ({toggleSignup}) => {
                     <Form.Label>Password</Form.Label>
                     <Form.Control type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter password" />
                 </Form.Group>
-                <Button variant="primary" className="w-100" onClick={handleLogin}>
+                <Button variant="dark" className="w-100" onClick={handleLogin}>
                     Login
                 </Button>
                 <p className="text-center mt-3">
