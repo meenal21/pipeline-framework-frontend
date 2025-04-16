@@ -38,8 +38,8 @@ const AdjacencyList = ({ nodes, edges }) => {
     }, [nodes, edges]); // Recompute on graph changes
 
     return (
-        <div style={{ flex: 1, padding: "10px", borderLeft: "1px solid #ddd", overflowY: "auto" }}>
-            <h3>Adjacency List</h3>
+        <div style={{ flex: 1, padding: "10px", borderLeft: "1px solid #ddd", overflowY: "auto", height: "85vh" }}>
+            
             <pre>{JSON.stringify(pipeline, null, 2)}</pre> {/* Pretty-print JSON */}
         </div>
     );

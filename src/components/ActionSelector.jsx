@@ -76,7 +76,7 @@ const ActionSelector = () => {
       
       <Row style={{height: "100vh"}}>
         {/* Cards column */}
-        <Col style={{  overflowY: "auto", height: "100vh" }}>
+        <Col style={{  overflowY: "auto", height: "85vh" }}>
         
           <Row>
             <Col md={6} className="mb-3">

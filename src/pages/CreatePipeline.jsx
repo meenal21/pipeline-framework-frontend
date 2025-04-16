@@ -1,7 +1,7 @@
 import react, { useState} from "react";
 import FlowChart from "../components/FlowChart";
 import AdjacencyList from "../components/AdjacencyList";
-import {Col, Row, Container} from "react-bootstrap"
+import {Col, Row, Container, Button} from "react-bootstrap"
 import ActionSelector from "../components/ActionSelector";
 
 
@@ -20,8 +20,8 @@ const CreatePipeline = () => {
     
     return (
             
-      <Container fluid style={{height: "100vh"}} className='p-3'>
-      <Row style={{height: "100vh"}} >
+      <Container fluid style={{height: "95vh"}} className='p-3'>
+      <Row style={{height: "95vh"}} >
         {/* Left Pane (33%) */}
         <Col md={3}>
         
@@ -33,7 +33,9 @@ const CreatePipeline = () => {
           <FlowChart onGraphUpdate={handleGraphUpdate}/>
         </Col>
         <Col md={3}>
+        <h5>Adjacency List</h5>
           <AdjacencyList nodes={nodes} edges={edges}/>  
+          <Button variant='dark'>Create</Button>
         </Col>
       </Row>
     </Container>
