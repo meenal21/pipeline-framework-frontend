@@ -33,7 +33,7 @@ const StageConfigurationPage = () => {
       <Accordion defaultActiveKey="0">
         {pipeline.stages.map((stage, idx) => (
           <Accordion.Item eventKey={idx.toString()} key={stage.userStageID}>
-            <Accordion.Header>Stage {stage.userStageID}: {stage.stageName}</Accordion.Header>
+            <Accordion.Header variant="dark">Stage {stage.userStageID}: {stage.stageName}</Accordion.Header>
             <Accordion.Body>
               <Form>
                 <Form.Group className="mb-3">
@@ -59,16 +59,33 @@ const StageConfigurationPage = () => {
                 </Form.Group>
 
                 <Form.Group className="mb-3">
-                  <Form.Label>Payload (JSON)</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={3}
-                    value={stage.payload}
-                    onChange={(e) =>
-                      handleStageChange(idx, "payload", e.target.value)
-                    }
-                  />
-                </Form.Group>
+                <Form.Label>Payload (Dynamic Inputs)</Form.Label>
+
+                {/* Safely parse JSON, fallback to empty object */}
+                {(() => {
+                  let parsedPayload = {};
+                  try {
+                    parsedPayload = (stage.payload || "{}");
+                  } catch (e) {
+                    console.error("Invalid JSON in payload");
+                    console.log(stage.payload);
+                  }
+
+                  return Object.entries(parsedPayload).map(([key, value]) => (
+                    <Form.Group className="mb-2" key={key}>
+                      <Form.Label>{key}</Form.Label>
+                      <Form.Control
+                        type="text"
+                        value={value}
+                        onChange={(e) => {
+                          const updatedPayload = { ...parsedPayload, [key]: e.target.value };
+                          handleStageChange(idx, "payload", JSON.stringify(updatedPayload, null, 2));
+                        }}
+                      />
+                    </Form.Group>
+                  ));
+                })()}
+              </Form.Group>
 
                 <Form.Group className="mb-3">
                   <Form.Check
