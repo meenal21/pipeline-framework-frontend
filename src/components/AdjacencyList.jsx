@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {Button} from "react-bootstrap"
 
 
-const AdjacencyList = ({ nodes, edges }) => {
+const AdjacencyList = ({ nodes, edges, pipeline, pipelineName, onPipelineUpdate }) => {
     const [dag, setDag] = useState({});
 
-    const [pipeline, setPipeline] = useState({
-        userId: 1,
-        pName: "MyPipeline",
-        dag: {},
-        stages: []
-      });
+    
 
       const getDependencies = (nodeId, edges) => {
         return edges
@@ -19,8 +13,10 @@ const AdjacencyList = ({ nodes, edges }) => {
       };
     useEffect(() => {
         let adjList = {};
+        
         nodes.forEach(node => adjList[node.id] = []); // Initialize adjacency list
         edges.forEach(edge => adjList[edge.source].push(edge.target));
+
         setDag(adjList);
         const stages = nodes.map((node) => ({
             userStageID: Number(node.id),
@@ -31,12 +27,13 @@ const AdjacencyList = ({ nodes, edges }) => {
             CFlag: node.data.CFlag || false,
             payload: node.data.payload || "{}"
           }));
-          setPipeline((prev) => ({
+          onPipelineUpdate((prev) => ({
             ...prev,
+            pName: pipelineName,
             dag: dag,
             stages: stages
           }));
-    }, [nodes, edges]); // Recompute on graph changes
+    }, [nodes, edges, pipelineName]); // Recompute on graph changes
 
     return (
         <div style={{ flex: 1, padding: "10px", borderLeft: "1px solid #ddd", overflowY: "auto", height: "80vh" }}>

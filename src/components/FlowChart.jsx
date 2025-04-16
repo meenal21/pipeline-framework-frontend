@@ -125,16 +125,16 @@ const FlowChart = ({onGraphUpdate}) => {
         return false;
       };
     
-    const getDAG = () => {
-        let adjList = {};
-        nodes.forEach(node => adjList[node.id] = []); // Initialize adjacency list
+    // const getDAG = () => {
+    //     let adjList = {};
+    //     nodes.forEach(node => adjList[node.id] = []); // Initialize adjacency list
     
-        edges.forEach(edge => {
-            adjList[edge.source].push(edge.target);
-        });
+    //     edges.forEach(edge => {
+    //         adjList[edge.source].push(edge.target);
+    //     });
     
-        return adjList;
-    };
+    //     return adjList;
+    // };
     const onConnect = useCallback(
         (params) => {
             if (willCreateCycle(params.source, params.target)) {
@@ -171,6 +171,7 @@ const FlowChart = ({onGraphUpdate}) => {
           e.preventDefault();
           const reactFlowBounds = e.currentTarget.getBoundingClientRect();
           const data = JSON.parse(e.dataTransfer.getData("application/reactflow"));
+          console.log("Dropping data", data);
           const position = {
             x: e.clientX - reactFlowBounds.left,
             y: e.clientY - reactFlowBounds.top
@@ -178,7 +179,7 @@ const FlowChart = ({onGraphUpdate}) => {
           const newNode = {
             id: idCount.toString(),
             position,
-            data: { label: data.text },
+            data: { label: data.text, payload: data.payload },
           };
           setNodes((nds) => [...nds, newNode]);
           setIdCount((prev) => prev + 1);

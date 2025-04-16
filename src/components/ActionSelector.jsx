@@ -8,8 +8,7 @@ const ActionSelector = () => {
   const [newAction, setNewAction] = useState({
     id: "",
     name: "",
-    input: "",
-    output: "",
+    language: "",
     file: null,
   });
 
@@ -60,6 +59,7 @@ const ActionSelector = () => {
       type: newAction.type,
       description: newAction.description,
       fileName: newAction.file?.name || "",
+      payload: newAction.payload
     };
 
     const updatedData = [...cardData, newCard];
@@ -93,6 +93,7 @@ const ActionSelector = () => {
                 <Card
                 draggable
                 onDragStart={(event) => {
+                  console.log(card);
                   event.dataTransfer.setData("application/reactflow", JSON.stringify(card));
                   event.dataTransfer.effectAllowed = "move";
                 }}
@@ -112,7 +113,7 @@ const ActionSelector = () => {
       </Row>
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title>My First Modal</Modal.Title>
+          <Modal.Title>Create New Action</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>

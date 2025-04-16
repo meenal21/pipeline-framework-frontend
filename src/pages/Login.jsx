@@ -10,9 +10,10 @@ const Login = ({toggleSignup}) => {
 
         const handleLogin = (e) =>  {
             e.preventDefault();
-            if ( email === "mpbjain@gmail.com" && password === "12345"){
+            if ( email === "admin" && password === "admin"){
                 localStorage.setItem("auth", true);
-                navigate("/dashboard");
+                // navigate("/dashboard");
+                navigate("/home");
                 window.location.reload(); //force reload of nav
             }
             else{

@@ -11,6 +11,7 @@ import Layout from './pages/Layout';
 import Landing from './pages/Landing';
 import HomePage from './pages/HomePage';
 import Dashboard from './pages/Dashboard';
+import StageConfigurationPage from './pages/StageConfigurationPage';
 
 const router = createHashRouter([
   {
@@ -42,6 +43,10 @@ const router = createHashRouter([
         {
           path: "/signup",
           element: <SignUpUI />
+        },
+        {
+          path: "/configure",
+          element: <StageConfigurationPage/>
         }
     ],
   }
