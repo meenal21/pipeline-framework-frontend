@@ -15,6 +15,9 @@ const CreatePipeline = () => {
         setNodes(updatedNodes);
         setEdges(updatedEdges);
     };
+
+    
+    
     return (
             
       <Container fluid style={{height: "100vh"}} className='p-3'>
