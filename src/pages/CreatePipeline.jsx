@@ -32,10 +32,12 @@ const CreatePipeline = () => {
         <Col md={6}>
           <FlowChart onGraphUpdate={handleGraphUpdate}/>
         </Col>
-        <Col md={3}>
+        <Col md={3 } >
         <h5>Adjacency List</h5>
           <AdjacencyList nodes={nodes} edges={edges}/>  
+          <div className="d-flex justify-content-center">
           <Button variant='dark'>Create</Button>
+          </div>
         </Col>
       </Row>
     </Container>
