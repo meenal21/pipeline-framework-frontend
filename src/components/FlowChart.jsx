@@ -7,46 +7,46 @@ import { ReactFlow,
     reconnectEdge,
     getIncomers,
     getOutgoers,
-    getConnectedEdges
+    getConnectedEdges, MiniMap
  } from "reactflow";
 import React, { useCallback,useState,useEffect , useRef}  from "react";
 import 'reactflow/dist/style.css'
 
 const initialNodes = [
-    { id: '1', position: { x: 0, y: 0 }, data: { label: '1' } }
   ];
 
 const FlowChart = ({onGraphUpdate}) => {
 
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-    const [ editingNode, setEditingNode] = useState(null);
+    //const [editingNode, setEditingNode] = useState(null);
 
-    const [idCount, setIdCount] = useState(2);
+    const [idCount, setIdCount] = useState(1);
     const edgeReconnectSuccessful = useRef(true);
 
     useEffect(() => {
         onGraphUpdate(nodes, edges);  // Update DAG whenever graph changes
     }, [nodes, edges]);
 
-    const onNodeDoubleClick = (event, node) => {
-        setEditingNode({id: node.id, label: node.data.label, x: node.position.x, y: node.position.y})
-    }
 
-    const handleInputChange = (e) => {
-        setEditingNode((prev) => ({...prev, label: e.target.value}))
-    }
+    // const onNodeDoubleClick = (event, node) => {
+    //     setEditingNode({id: node.id, label: node.data.label, x: node.position.x, y: node.position.y})
+    // }
 
-    const handleInputSubmit = (e) => {
-        if (e.key === "Enter" && editingNode) {
-          setNodes((prevNodes) =>
-            prevNodes.map((node) =>
-              node.id === editingNode.id ? { ...node, data: { label: editingNode.label } } : node
-            )
-          );
-          setEditingNode(null); // Exit editing mode
-        }
-      };
+    // const handleInputChange = (e) => {
+    //     setEditingNode((prev) => ({...prev, label: e.target.value}))
+    // }
+
+    // const handleInputSubmit = (e) => {
+    //     if (e.key === "Enter" && editingNode) {
+    //       setNodes((prevNodes) =>
+    //         prevNodes.map((node) =>
+    //           node.id === editingNode.id ? { ...node, data: { label: editingNode.label } } : node
+    //         )
+    //       );
+    //       setEditingNode(null); // Exit editing mode
+    //     }
+    //   };
       // will check every node
 
     const onNodesDelete = useCallback(
@@ -75,16 +75,16 @@ const FlowChart = ({onGraphUpdate}) => {
         },
         [nodes, edges],
       );
-    const addNode = () => {
-        const newNode = {
-          id: idCount.toString(),
-          position: { x: Math.random() * 400, y: Math.random() * 400 },
-          data: { label: `Node ${idCount}`},
-        };
+    // const addNode = () => {
+    //     const newNode = {
+    //       id: idCount.toString(),
+    //       position: { x: Math.random() * 400, y: Math.random() * 400 },
+    //       data: { label: `Node ${idCount}`},
+    //     };
     
-        setNodes((prevNodes) => [...prevNodes, newNode]);
-        setIdCount(idCount + 1);
-      };
+    //     setNodes((prevNodes) => [...prevNodes, newNode]);
+    //     setIdCount(idCount + 1);
+    //   };
 
       const isCyclic = (start, adjList, visited, recStack) => {
         if (!visited[start]) {
@@ -166,7 +166,7 @@ const FlowChart = ({onGraphUpdate}) => {
 
         
     return (
-        <div style={{ width: '50vw', height: '50vh' , position: 'relative'}}
+        <div style={{ width: '50vw', height: '90vh' , position: 'relative'}}
         onDrop={(e) => {
           e.preventDefault();
           const reactFlowBounds = e.currentTarget.getBoundingClientRect();
@@ -188,9 +188,9 @@ const FlowChart = ({onGraphUpdate}) => {
           e.dataTransfer.dropEffect = "move";
         }}
         >
-            <button onClick={addNode}>
+            {/* <button onClick={addNode}>
                 Add Node
-            </button>
+            </button> */}
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
@@ -203,12 +203,13 @@ const FlowChart = ({onGraphUpdate}) => {
                 onReconnectEnd={onReconnectEnd}
                 onConnect={onConnect}
                 defaultEdgeOptions={{ markerEnd: {type: "arrowclosed" }}}
-                onNodeDoubleClick={onNodeDoubleClick}
+                // onNodeDoubleClick={onNodeDoubleClick}
             >
                 <Controls />
+                <MiniMap />
                 <Background variant="dots" gap={12} size={1}/>
             </ReactFlow>
-            {editingNode && (
+            {/* {editingNode && (
                 <input
                 type="text"
                 value={editingNode.label}
@@ -223,7 +224,7 @@ const FlowChart = ({onGraphUpdate}) => {
                 }}
                 autoFocus
                 />
-            )}
+            )} */}
         </div>
       );
 }

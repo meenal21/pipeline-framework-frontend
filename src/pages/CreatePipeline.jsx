@@ -17,11 +17,11 @@ const CreatePipeline = () => {
     };
     return (
             
-            <Container fluid style={{height: "100vh"}}>
-      <Row style={{height: "100vh"}}>
+      <Container fluid style={{height: "100vh"}} className='p-3'>
+      <Row style={{height: "100vh"}} >
         {/* Left Pane (33%) */}
         <Col md={3}>
-        <h5>Drag and Drop an action</h5>
+        
           <ActionSelector/>
         </Col>
 
