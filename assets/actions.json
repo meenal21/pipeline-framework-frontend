@@ -1,12 +1,97 @@
 [
-    { "id": 1, "text": "Extract Data from API" },
-    { "id": 2, "text": "Load to S3 Bucket" },
-    { "id": 3, "text": "Transform with Spark" },
-    { "id": 4, "text": "Run SQL Validation" },
-    { "id": 5, "text": "Train ML Model" },
-    { "id": 6, "text": "Evaluate Model Accuracy" },
-    { "id": 7, "text": "Send Slack Notification" },
-    { "id": 8, "text": "Trigger CI/CD Deployment" },
-    { "id": 9, "text": "Archive to Data Lake" },
-    { "id": 10, "text": "Monitor Pipeline Health" }
-  ]
+  {
+    "id": 1,
+    "text": "Extract Data from API",
+    "payload": {
+      "api_url": "",
+      "http_method": "",
+      "headers": "",
+      "auth_token": ""
+    }
+  },
+  {
+    "id": 2,
+    "text": "Load to S3 Bucket",
+    "payload": {
+      "bucket_name": "",
+      "file_path": "",
+      "region": "",
+      "access_key": "",
+      "secret_key": ""
+    }
+  },
+  {
+    "id": 3,
+    "text": "Transform with Spark",
+    "payload": {
+      "script_path": "",
+      "input_path": "",
+      "output_path": "",
+      "spark_master": ""
+    }
+  },
+  {
+    "id": 4,
+    "text": "Run SQL Validation",
+    "payload": {
+      "db_connection_string": "",
+      "query": "",
+      "expected_result": ""
+    }
+  },
+  {
+    "id": 5,
+    "text": "Train ML Model",
+    "payload": {
+      "training_data_path": "",
+      "model_type": "",
+      "hyperparameters": "",
+      "output_model_path": ""
+    }
+  },
+  {
+    "id": 6,
+    "text": "Evaluate Model Accuracy",
+    "payload": {
+      "model_path": "",
+      "test_data_path": "",
+      "metric": ""
+    }
+  },
+  {
+    "id": 7,
+    "text": "Send Slack Notification",
+    "payload": {
+      "webhook_url": "",
+      "channel": "",
+      "message": ""
+    }
+  },
+  {
+    "id": 8,
+    "text": "Trigger CI/CD Deployment",
+    "payload": {
+      "pipeline_url": "",
+      "branch": "",
+      "trigger_token": ""
+    }
+  },
+  {
+    "id": 9,
+    "text": "Archive to Data Lake",
+    "payload": {
+      "storage_path": "",
+      "retention_days": "",
+      "format": ""
+    }
+  },
+  {
+    "id": 10,
+    "text": "Monitor Pipeline Health",
+    "payload": {
+      "monitoring_tool": "",
+      "dashboard_url": "",
+      "alert_threshold": ""
+    }
+  }
+]
