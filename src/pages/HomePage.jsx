@@ -1,5 +1,6 @@
 import { Container,Button, Row, Col, Card } from "react-bootstrap";
 import { useNavigate } from 'react-router-dom'
+import PipelineList from "../components/PipelineList";
 
 const HomePage = () => {
   
@@ -39,26 +40,7 @@ const HomePage = () => {
           </Row>
           <Row style={{ height: "30vh" }} className="p-3"> 
             <Col>
-              <Card className="p-3 h-100 d-flex justify-content-center align-items-center">
-              <h5>Execute a Pipeline</h5>
-              
-              <Container className=" p-3" style={{ width: "300px", maxHeight: "180px", overflowY: "auto",  padding: "1rem",
-    scrollbarWidth: "thin",
-    scrollbarColor: "transparent transparent",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    border: "none" }}>
-              <p>pipeline 2</p>
-              <p>pipeline 3</p>
-              <p>pipeline 4</p>
-              <p>pipeline 5</p>
-              <p>pipeline 4</p>
-              <p>pipeline 6</p>
-              <p>pipeline 7</p>
-              <p>pipeline 8</p>
-              </Container>
-              </Card>
+              <PipelineList />
             </Col>
           </Row>
           <Row style={{ height: "30vh" }} className="p-3">

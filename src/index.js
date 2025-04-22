@@ -12,6 +12,7 @@ import Landing from './pages/Landing';
 import HomePage from './pages/HomePage';
 import Dashboard from './pages/Dashboard';
 import StageConfigurationPage from './pages/StageConfigurationPage';
+import PipelineDetails from './pages/PipelineDetails';
 
 const router = createHashRouter([
   {
@@ -39,6 +40,10 @@ const router = createHashRouter([
           path: "/createpipeline",
           element: <CreatePipeline />
           
+        },
+        {
+          path: "/pipeline-detail/:id",
+          element: <PipelineDetails />
         },
         {
           path: "/signup",

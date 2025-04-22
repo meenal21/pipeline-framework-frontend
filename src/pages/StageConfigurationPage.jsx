@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Card, Form, Button, Accordion } from "react-bootstrap";
+import { savePipeline } from "../utils/pipelineStorage"; // add this at the top
+import { useNavigate } from "react-router-dom";
 
 const StageConfigurationPage = () => {
   const [pipeline, setPipeline] = useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const stored = localStorage.getItem("pipeline");
     if (stored) {
@@ -22,7 +24,10 @@ const StageConfigurationPage = () => {
   const handleSave = () => {
     console.log("Final pipeline:", pipeline);
     localStorage.setItem("configuredPipeline", JSON.stringify(pipeline));
+    savePipeline(pipeline);
     alert("Pipeline saved!");
+    navigate("/home"); // Redirect to home or another page
+
   };
 
   if (!pipeline) return <div>Loading pipeline...</div>;

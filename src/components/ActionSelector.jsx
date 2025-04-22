@@ -153,7 +153,7 @@ const ActionSelector = () => {
         </Modal.Body>
 
         <Modal.Footer>
-        <Button variant="primary" onClick={handleSubmit}>
+        <Button variant="dark" onClick={handleSubmit}>
             Add Action
           </Button>
           <Button variant="secondary" onClick={() => setShowModal(false)}>

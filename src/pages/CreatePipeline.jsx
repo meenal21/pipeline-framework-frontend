@@ -13,7 +13,7 @@ const CreatePipeline = () => {
     const [edges, setEdges] = useState([]);
     const navigate = useNavigate();
     const [pipeline, setPipeline] = useState({
-      userId: 1,
+      id: `pipeline-${Date.now()}`,
       pName: pipelineName,
       dag: {},
       stages: []
