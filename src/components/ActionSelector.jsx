@@ -6,6 +6,39 @@ const ActionSelector = () => {
   const [cardData, setCardData] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
 
+  function transformPayload(action) {
+    try {
+      const rawPayload = JSON.parse(action.payload);
+      const payloadType = {};
+      const clearedPayload = {};
+  
+      for (const [key, value] of Object.entries(rawPayload)) {
+        if (Array.isArray(value)) {
+          payloadType[key] = {
+            type: value[0],
+            isArray: true
+          };
+          clearedPayload[key] = [];
+        } else {
+          payloadType[key] = {
+            type: value,
+            isArray:false
+          };
+          clearedPayload[key] = null; // Or "" if you prefer empty strings
+        }
+      }
+  
+      action.payloadType = payloadType;
+      action.payload = JSON.stringify(clearedPayload); // Keep it as a JSON string
+    } catch (e) {
+      console.error("Invalid payload JSON:", e);
+      action.payloadType = null;
+    }
+  
+    return action;
+  }
+
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -13,7 +46,8 @@ const ActionSelector = () => {
         console.log(data.actions);
         // Ensure data is an array before storing
         const actionArray = Array.isArray(data.actions) ? data.actions : [];
-        localStorage.setItem("actions", JSON.stringify(actionArray));
+        const transformedActions = actionArray.map(transformPayload);
+        localStorage.setItem("actions", JSON.stringify(transformedActions));
         
         const stored = localStorage.getItem("actions");
         console.log(stored.actions);

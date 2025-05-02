@@ -20,6 +20,7 @@ const StageConfigurationPage = () => {
       updatedStages[index][field] = value;
       return { ...prev, stages: updatedStages };
     });
+    console.log("Updated pipeline:", pipeline);
   };
 
   const handleSave = () => {
@@ -54,70 +55,113 @@ const StageConfigurationPage = () => {
             <Accordion.Header variant="dark">
               Stage {stage.userStageID}: {stage.stageName}
             </Accordion.Header>
+            
             <Accordion.Body>
-              <Form>
-                <Form.Group className="mb-3">
-                  <Form.Label>Stage Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={stage.stageName}
-                    onChange={(e) =>
-                      handleStageChange(idx, "stageName", e.target.value)
-                    }
-                  />
-                </Form.Group>
+            <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>Payload (Dynamic Inputs)</Form.Label>
+              {(() => {
+                let parsedPayload = {};
+                try {
+                  if (typeof stage.payload === "string") {
+                    parsedPayload = JSON.parse(stage.payload);
+                  } else if (typeof stage.payload === "object" && stage.payload !== null) {
+                    parsedPayload = stage.payload;
+                  }
+                } catch (e) {
+                  console.error("Invalid JSON in payload:", stage.payload);
+                }
 
-                <Form.Group className="mb-3">
-                  <Form.Label>Action ID</Form.Label>
-                  <Form.Control
-                    type="number"
-                    value={stage.actionId}
-                    onChange={(e) =>
-                      handleStageChange(idx, "actionId", e.target.value)
-                    }
-                  />
-                </Form.Group>
+                const payloadType = stage.payloadType || {};
 
-                <Form.Group className="mb-3">
-                  <Form.Label>Payload (Dynamic Inputs)</Form.Label>
-                  {(() => {
-                    let parsedPayload = {};
-                    try {
-                      if (typeof stage.payload === "string") {
-                        parsedPayload = JSON.parse(stage.payload);
-                      } else if (typeof stage.payload === "object" && stage.payload !== null) {
-                        parsedPayload = stage.payload;
-                      }
-                    } catch (e) {
-                      console.error("Invalid JSON in payload:", stage.payload);
-                    }
+                return Object.entries(parsedPayload).map(([key, value]) => {
+                  const typeInfo = payloadType[key] || { type: "string" };
+                  const htmlInputType =
+                    typeInfo.type === "int" || typeInfo.type === "float" ? "number" : "text";
+                  const isFileInput = key.toLowerCase().includes("file");
+                  const isBoolean = typeInfo.type === "boolean";
 
-                    return Object.entries(parsedPayload).map(([key, value]) => (
-                      <Form.Group className="mb-2" key={key}>
-                        <Form.Label>{key}</Form.Label>
+                  return (
+                    <Form.Group className="mb-2" key={key}>
+                      <Form.Label>{key}</Form.Label>
+                      {isFileInput && typeInfo.type === "string"? (
                         <Form.Control
-                          type="text"
-                          value={value}
+                          type="file"
+                          multiple={typeInfo.isArray} // allow multiple files if it's an array
                           onChange={(e) => {
-                            const updatedPayload = { ...parsedPayload, [key]: e.target.value };
+                            const fileList = Array.from(e.target.files);
+                            const fileNames = fileList.map((f) => f.name);
+
+                            // If it's an array, store multiple filenames; if not, store a single filename
+                            const updatedPayload = {
+                              ...parsedPayload,
+                              [key]: typeInfo.isArray ? fileNames : fileNames[0] || "",
+                            };
+
                             handleStageChange(idx, "payload", JSON.stringify(updatedPayload, null, 2));
                           }}
                         />
-                      </Form.Group>
-                    ));
-                  })()}
-                </Form.Group>
+                      ) : isBoolean ? (
+                        <Form.Check
+                          type="switch"
+                          id={`custom-switch-${key}`}
+                          label={value ? "True" : "False"}
+                          checked={value}
+                          onChange={(e) => {
+                            const updatedPayload = {
+                              ...parsedPayload,
+                              [key]: e.target.checked,
+                            };
+                            handleStageChange(idx, "payload", JSON.stringify(updatedPayload, null, 2));
+                          }}
+                        />
+                      ) : (
+                        <Form.Control
+                          type={htmlInputType}
+                          value={value}
+                          onChange={(e) => {
+                            let newValue = e.target.value;
 
-                <Form.Group className="mb-3">
-                  <Form.Check
-                    type="checkbox"
-                    label="CFlag (Custom Flag)"
-                    checked={stage.CFlag}
-                    onChange={(e) =>
-                      handleStageChange(idx, "CFlag", e.target.checked)
-                    }
-                  />
-                </Form.Group>
+                            // Input validation based on type
+                            switch (typeInfo.type) {
+                              case "int":
+                                // Allow only numeric characters (integer)
+                                if (!/^\d*$/.test(newValue)) {
+                                  return; // Prevent entering non-numeric values
+                                }
+                                newValue = newValue === "" ? null : parseInt(newValue, 10);
+                                break;
+                              case "float":
+                                // Allow only numbers and decimal points (float)
+                                if (!/^\d*\.?\d*$/.test(newValue)) {
+                                  return; // Prevent entering non-numeric or invalid float values
+                                }
+                                newValue = newValue === "" ? null : parseFloat(newValue);
+                                break;
+                              case "boolean":
+                                // Allow only "true" or "false" (boolean values)
+                                if (newValue !== "true" && newValue !== "false") {
+                                  return; // Prevent entering any value other than "true" or "false"
+                                }
+                                newValue = newValue === "true";
+                                break;
+                              case "string":
+                              default:
+                                // For strings, allow any input
+                                newValue = String(newValue);
+                            }
+
+                            const updatedPayload = { ...parsedPayload, [key]: newValue };
+                            handleStageChange(idx, "payload", JSON.stringify(updatedPayload, null, 2));
+                          }}
+                        />
+                      )}
+                    </Form.Group>
+                  );
+                });
+              })()}
+            </Form.Group>
+
               </Form>
             </Accordion.Body>
           </Accordion.Item>

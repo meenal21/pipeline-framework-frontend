@@ -179,7 +179,7 @@ const FlowChart = ({onGraphUpdate}) => {
           const newNode = {
             id: idCount.toString(),
             position,
-            data: { actid: data.actid, label: data.name, payload: data.payload },
+            data: { actid: data.actid, label: data.name, payload: data.payload, payloadType: data.payloadType, flag: data.flag },
           };
           setNodes((nds) => [...nds, newNode]);
           setIdCount((prev) => prev + 1);

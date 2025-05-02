@@ -31,7 +31,8 @@ const AdjacencyList = ({ nodes, edges, pipeline, pipelineName, onPipelineUpdate 
             nextSidSuccess: dag[node.id]?.edges || [],
             dependencies: getDependencies(node.id, edges),
             CFlag: node.data.CFlag || false,
-            payload: node.data.payload || "{}"
+            payload: node.data.payload || "{}",
+            payloadType: node.data.payloadType || "json",
           }));
           onPipelineUpdate((prev) => ({
             ...prev,
