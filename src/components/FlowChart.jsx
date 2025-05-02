@@ -11,12 +11,15 @@ import { ReactFlow,
  } from "reactflow";
 import React, { useCallback,useState,useEffect , useRef}  from "react";
 import 'reactflow/dist/style.css'
+import DecisionNode from "./DecisionNode";
 
 const initialNodes = [
   ];
+const nodeTypes = { decision: DecisionNode };
 
 const FlowChart = ({onGraphUpdate}) => {
 
+  
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     //const [editingNode, setEditingNode] = useState(null);
@@ -141,6 +144,14 @@ const FlowChart = ({onGraphUpdate}) => {
                 alert("Cycle detected! Edge not added.");
                 return;
               }
+              const sourceNode = nodes.find(n => n.id === params.source);
+                    if (sourceNode?.type === "decision") {
+                         const existing = edges.filter(e => e.source === sourceNode.id);
+                         if (existing.length >= 2) {
+                             alert("Decision node can only have 2 outgoing connections.");
+                             return;
+                         }
+                      }
             setEdges((eds) => addEdge({...params, markerEnd: { type: "arrowclosed" } }, eds))
         },
 
@@ -179,6 +190,7 @@ const FlowChart = ({onGraphUpdate}) => {
           const newNode = {
             id: idCount.toString(),
             position,
+            type: data.flag ? "decision" : undefined,
             data: { actid: data.actId, label: data.name, payload: data.payload, payloadType: data.payloadType, flag: data.flag },
           };
           setNodes((nds) => [...nds, newNode]);
@@ -204,6 +216,7 @@ const FlowChart = ({onGraphUpdate}) => {
                 onReconnectEnd={onReconnectEnd}
                 onConnect={onConnect}
                 defaultEdgeOptions={{ markerEnd: {type: "arrowclosed" }}}
+                nodeTypes={nodeTypes}
                 // onNodeDoubleClick={onNodeDoubleClick}
             >
                 <Controls />

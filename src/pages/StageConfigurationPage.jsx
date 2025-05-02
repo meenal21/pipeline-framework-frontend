@@ -29,7 +29,6 @@ const StageConfigurationPage = () => {
     };
     pipelineToSave.stages.forEach(stage => {
       delete stage["payloadType"];
-      delete stage["flag"];
     });
     console.log("Final pipeline:", pipelineToSave);
     
