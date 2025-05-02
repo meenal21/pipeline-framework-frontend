@@ -18,9 +18,7 @@ const XDAGGraph = ({dagJson, pxid}) => {
 
   const getColor = (status) => {
     switch (status) {
-      case "success": return "green";
-      case "error": return "red";
-      case "running": return "orange";
+      case "true": return "green";
       default: return "gray";
     }
   };

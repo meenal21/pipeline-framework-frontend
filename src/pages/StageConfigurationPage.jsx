@@ -29,6 +29,7 @@ const StageConfigurationPage = () => {
     };
     pipelineToSave.stages.forEach(stage => {
       delete stage["payloadType"];
+      delete stage["flag"];
     });
     console.log("Final pipeline:", pipelineToSave);
     
@@ -110,6 +111,7 @@ const StageConfigurationPage = () => {
                           : "text";
                       const isFileInput = key.toLowerCase().includes("file");
                       const isBoolean = typeInfo.type === "boolean";
+                      const isOutput = key.toLowerCase().includes("output");
 
                       return (
                         <Form.Group className="mb-2" key={key}>
@@ -124,7 +126,7 @@ const StageConfigurationPage = () => {
                               }
                               label={value ? "True" : "False"}
                             />
-                          ) : isFileInput && typeInfo.type === "string" ? (
+                          ) : isFileInput && typeInfo.type === "string" && !isOutput? (
                             <Form.Control
                               type="file"
                               multiple={typeInfo.isArray}

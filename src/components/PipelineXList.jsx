@@ -37,6 +37,8 @@ const PipelineXList = ({ pipelines }) => {
                   <th>#</th>
                   <th>Created At</th>
                   <th>Pipeline Name</th>
+                  <th>Status</th>
+                  {/* <th>Actions</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -44,13 +46,16 @@ const PipelineXList = ({ pipelines }) => {
                   <tr key={pipeline.pid || index}>
                     <td>{index + 1}</td>
                     <td>
-                      {pipeline.created_at || "12th May"}
+                      {pipeline.created || "N/A"}
                     </td>
                     <td
                       style={{ cursor: "pointer", color: "#0d6efd" }}
                       onClick={() => goToPipelineXDetails(pipeline.pxId)}
                     >
                       {pipeline.name || "Untitled"}
+                    </td>
+                    <td>
+                      {pipeline.status || "N/A"}
                     </td>
                     {/* <td>
                       <div className="d-flex align-items-center gap-2">
