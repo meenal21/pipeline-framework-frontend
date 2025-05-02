@@ -46,7 +46,7 @@ const PipelineXList = ({ pipelines }) => {
                   <tr key={pipeline.pid || index}>
                     <td>{index + 1}</td>
                     <td>
-                      {pipeline.created || "N/A"}
+                      {new Date(pipeline.createdAt).toLocaleString() || "N/A"}
                     </td>
                     <td
                       style={{ cursor: "pointer", color: "#0d6efd" }}

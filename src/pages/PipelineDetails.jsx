@@ -24,12 +24,14 @@ const PipelineDetails = () => {
   }, [id]);
 
   return (
-    <div>
-      <h4>Pipeline Configuration</h4>
+    <div style={{ paddingTop: '20px' }}>
       {pipeline ? (
         <div>
-        <pre>{JSON.stringify(pipeline, null, 2)}</pre> // Render as JSON
-        <PipelineDAG />
+          <h3 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Pipeline: {pipeline.name}</h3>
+          
+        {/* <pre>{JSON.stringify(pipeline, null, 2)}</pre>  */}
+        
+        <PipelineDAG dagJson={pipeline.dag}/>
         </div>
       ) : (
         <p>No pipeline found with ID {id}</p>

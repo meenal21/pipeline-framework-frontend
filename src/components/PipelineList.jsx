@@ -69,6 +69,7 @@ const handleDeleteClick = (pipeline) => {
               <thead>
                 <tr>
                   <th>#</th>
+                  <th>Created At</th>
                   <th>Pipeline Name</th>
                   <th>Actions</th>
                 </tr>
@@ -77,6 +78,9 @@ const handleDeleteClick = (pipeline) => {
                 {pipelines.map((pipeline, index) => (
                   <tr key={pipeline.pid || index}>
                     <td>{index + 1}</td>
+                    <td>
+                      {new Date(pipeline.createdAt).toLocaleString() || "N/A"}
+                    </td>
                     <td
                       style={{ cursor: "pointer", color: "#0d6efd" }}
                       onClick={() => goToPipelineDetails(pipeline.pid)}
