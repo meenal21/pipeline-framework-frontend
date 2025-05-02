@@ -187,6 +187,7 @@ const FlowChart = ({onGraphUpdate}) => {
             x: e.clientX - reactFlowBounds.left,
             y: e.clientY - reactFlowBounds.top
           };
+          console.log("flag", data.flag);
           const newNode = {
             id: idCount.toString(),
             position,

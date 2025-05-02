@@ -2,7 +2,6 @@
 import React from "react";
 import { Table, Button, Container, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { deletePipeline, runPipeline} from "../api"; // Adjust the import path as necessary
 
 const PipelineList = ({ pipelines }) => {

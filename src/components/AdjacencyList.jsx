@@ -55,7 +55,7 @@ const AdjacencyList = ({ nodes, edges, pipeline, pipelineName, onPipelineUpdate 
             stageName: node.data.label || `Stage ${nodeId}`,
             actionId: node.data.actid || 1,
             nextSidSuccess: adjList[nodeId]?.edges || [],
-            nextSidFailure: [],
+            nextSidFaliure: [],
             dependencies: getDependencies(nodeId, edges),
             CFlag: grandparentHasFlag ? true : node.data.CFlag || false, // <-- Set CFlag based on grandparent's flag
             payload: node.data.payload || "{}",

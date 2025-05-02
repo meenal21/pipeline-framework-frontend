@@ -19,7 +19,7 @@ const XDAGGraph = ({dagJson, pxid}) => {
   const getColor = (status) => {
     switch (status) {
       case "true": return "green";
-      default: return "gray";
+      default: return "white";
     }
   };
   useEffect(() => {
