@@ -13,16 +13,22 @@ const AdjacencyList = ({ nodes, edges, pipeline, pipelineName, onPipelineUpdate 
       };
     useEffect(() => {
         let adjList = {};
-        
-        nodes.forEach(node => adjList[node.id] = []); // Initialize adjacency list
-        edges.forEach(edge => adjList[edge.source].push(edge.target));
+        console.log(nodes)
+        nodes.forEach(node => {adjList[node.id] = {
+          
+          name: node.data.label || `Stage ${node.id}`,
+          edges: [],
+          position: node.position,
+          };
+        }); // Initialize adjacency list
+        edges.forEach(edge => {adjList[edge.source].edges.push(edge.target);});
 
         setDag(adjList);
         const stages = nodes.map((node) => ({
             userStageID: Number(node.id),
             stageName: node.data.label || `Stage ${node.id}`,
             actionId: node.data.actionId || 1,
-            nextSidSuccess: dag[node.id] || [],
+            nextSidSuccess: dag[node.id]?.edges || [],
             dependencies: getDependencies(node.id, edges),
             CFlag: node.data.CFlag || false,
             payload: node.data.payload || "{}"

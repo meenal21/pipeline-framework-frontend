@@ -1,24 +1,43 @@
-import  { Outlet, Link } from 'react-router-dom';
-import { Navbar, Nav, Container, Button } from "react-bootstrap";
+import { Link, useNavigate } from 'react-router-dom';
+import { Navbar, Nav, Container } from "react-bootstrap";
+import { useEffect, useState } from 'react';
 
 const NavbarCustom = () => {
-    return (
-            <Navbar expand="md" bg="dark" variant="dark" className="shadow-sm">
-                <Container fluid className="px-3">
-                    {/* Brand Logo */}
-                    <Navbar.Brand as={Link} to="/">MyWebsite</Navbar.Brand>
+    const [loggedIn, setLoggedIn] = useState(false);
+    const navigate = useNavigate();
 
-                    {/* Mobile Toggle Button */}
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
+    useEffect(() => {
+        const checkLoginStatus = () => {
+            const token = localStorage.getItem("token");
+            setLoggedIn(!!token);
+        };
+        checkLoginStatus();
+    },[]);
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userId");
+        setLoggedIn(false);
+        navigate("/");
+    };
+
+    return (
+        <Navbar expand="md" bg="dark" variant="dark" className="shadow-sm">
+            <Container fluid className="px-5">
+                <Navbar.Brand as={Link} to="/">StageFlow</Navbar.Brand>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ms-auto">
-                        <Nav.Link as={Link} to="/">Home</Nav.Link>
+                        <Nav.Link as={Link} to={loggedIn ? "/home" : "/"}>Home</Nav.Link>
                         <Nav.Link as={Link} to="/about">About</Nav.Link>
                         <Nav.Link as={Link} to="/contact">Contact</Nav.Link>
+                        {loggedIn && (
+                            <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+                        )}
                     </Nav>
-                    </Navbar.Collapse>
-                </Container>            
-            </Navbar>
+                </Navbar.Collapse>
+            </Container>            
+        </Navbar>
     );
 };
 

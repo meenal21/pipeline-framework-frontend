@@ -4,6 +4,7 @@ import FlowChart from "../components/FlowChart";
 import AdjacencyList from "../components/AdjacencyList";
 import {Col, Row, Container, Button, Form} from "react-bootstrap"
 import ActionSelector from "../components/ActionSelector";
+import { getActions } from "../api";
 
 
 
@@ -13,7 +14,7 @@ const CreatePipeline = () => {
     const [edges, setEdges] = useState([]);
     const navigate = useNavigate();
     const [pipeline, setPipeline] = useState({
-      id: `pipeline-${Date.now()}`,
+      userId: localStorage.getItem("userId"),
       pName: pipelineName,
       dag: {},
       stages: []
@@ -30,6 +31,7 @@ const CreatePipeline = () => {
 
     useEffect(() => {
       localStorage.setItem("pipelineName", pipelineName);
+     
     }, [pipelineName]);
 
     

@@ -1,24 +1,40 @@
 import { useState }  from "react";
 import { useNavigate } from 'react-router-dom'
 import { Form, Button } from "react-bootstrap";
+import { login } from "../api";
 
-const Login = ({toggleSignup}) => {
+const Login = ({onSuccess, toggleSignup}) => {
 
         const [ email, setEmail ] = useState("");
         const [ password, setPassword ] = useState("");
-        const navigate = useNavigate();
 
-        const handleLogin = (e) =>  {
+        const handleLogin = (e) => {
             e.preventDefault();
-            if ( email === "admin" && password === "admin"){
-                localStorage.setItem("auth", true);
-                // navigate("/dashboard");
-                navigate("/home");
-                window.location.reload(); //force reload of nav
-            }
-            else{
-                alert("Invalid creds");
-            }
+        
+            login(email, password)
+                .then((res) => {
+                    if (res.status === 200) {
+                        return res.json();  // return the parsed JSON
+                    } else {
+                        throw new Error("Invalid credentials");
+                    }
+                    
+                })
+                .then((data) => {
+                    // add if data.message exists then error!
+                    localStorage.setItem("auth", true);
+                    localStorage.setItem("token", data.token);
+                    localStorage.setItem("userId", data.user.userId);
+                    localStorage.setItem("pipelineList", JSON.stringify(data.pipelines));
+                    localStorage.setItem("pipelineListx", JSON.stringify(data.pipelinesX));
+        
+                    onSuccess();
+                    window.location.reload();
+                })
+                .catch((err) => {
+                    console.error("Login failed:", err);
+                    alert("Login failed: " + err.message);
+                });
         };
         return (
             <Form>

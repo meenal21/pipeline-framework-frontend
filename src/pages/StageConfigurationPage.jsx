@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Card, Form, Button, Accordion } from "react-bootstrap";
-import { savePipeline } from "../utils/pipelineStorage"; // add this at the top
+import { savePipeline } from "../api";
 import { useNavigate } from "react-router-dom";
 
 const StageConfigurationPage = () => {
   const [pipeline, setPipeline] = useState(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     const stored = localStorage.getItem("pipeline");
     if (stored) {
@@ -22,12 +23,24 @@ const StageConfigurationPage = () => {
   };
 
   const handleSave = () => {
-    console.log("Final pipeline:", pipeline);
-    localStorage.setItem("configuredPipeline", JSON.stringify(pipeline));
-    savePipeline(pipeline);
-    alert("Pipeline saved!");
-    navigate("/home"); // Redirect to home or another page
-
+    const pipelineToSave = {
+      ...pipeline,
+      dag: JSON.stringify(pipeline.dag) // Convert DAG to string
+    };
+    
+    console.log("Final pipeline:", pipelineToSave);
+    localStorage.setItem("configuredPipeline", JSON.stringify(pipelineToSave));
+    
+    savePipeline(pipelineToSave)
+      .then((response) => {
+        console.log("Pipeline saved successfully:", response);
+        alert("Pipeline saved!");
+        navigate("/home");
+      })
+      .catch((error) => {
+        console.error("Error saving pipeline:", error);
+        alert("Error saving pipeline");
+      });  
   };
 
   if (!pipeline) return <div>Loading pipeline...</div>;
@@ -38,7 +51,9 @@ const StageConfigurationPage = () => {
       <Accordion defaultActiveKey="0">
         {pipeline.stages.map((stage, idx) => (
           <Accordion.Item eventKey={idx.toString()} key={stage.userStageID}>
-            <Accordion.Header variant="dark">Stage {stage.userStageID}: {stage.stageName}</Accordion.Header>
+            <Accordion.Header variant="dark">
+              Stage {stage.userStageID}: {stage.stageName}
+            </Accordion.Header>
             <Accordion.Body>
               <Form>
                 <Form.Group className="mb-3">
@@ -64,33 +79,34 @@ const StageConfigurationPage = () => {
                 </Form.Group>
 
                 <Form.Group className="mb-3">
-                <Form.Label>Payload (Dynamic Inputs)</Form.Label>
+                  <Form.Label>Payload (Dynamic Inputs)</Form.Label>
+                  {(() => {
+                    let parsedPayload = {};
+                    try {
+                      if (typeof stage.payload === "string") {
+                        parsedPayload = JSON.parse(stage.payload);
+                      } else if (typeof stage.payload === "object" && stage.payload !== null) {
+                        parsedPayload = stage.payload;
+                      }
+                    } catch (e) {
+                      console.error("Invalid JSON in payload:", stage.payload);
+                    }
 
-                {/* Safely parse JSON, fallback to empty object */}
-                {(() => {
-                  let parsedPayload = {};
-                  try {
-                    parsedPayload = (stage.payload || "{}");
-                  } catch (e) {
-                    console.error("Invalid JSON in payload");
-                    console.log(stage.payload);
-                  }
-
-                  return Object.entries(parsedPayload).map(([key, value]) => (
-                    <Form.Group className="mb-2" key={key}>
-                      <Form.Label>{key}</Form.Label>
-                      <Form.Control
-                        type="text"
-                        value={value}
-                        onChange={(e) => {
-                          const updatedPayload = { ...parsedPayload, [key]: e.target.value };
-                          handleStageChange(idx, "payload", JSON.stringify(updatedPayload, null, 2));
-                        }}
-                      />
-                    </Form.Group>
-                  ));
-                })()}
-              </Form.Group>
+                    return Object.entries(parsedPayload).map(([key, value]) => (
+                      <Form.Group className="mb-2" key={key}>
+                        <Form.Label>{key}</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={value}
+                          onChange={(e) => {
+                            const updatedPayload = { ...parsedPayload, [key]: e.target.value };
+                            handleStageChange(idx, "payload", JSON.stringify(updatedPayload, null, 2));
+                          }}
+                        />
+                      </Form.Group>
+                    ));
+                  })()}
+                </Form.Group>
 
                 <Form.Group className="mb-3">
                   <Form.Check
@@ -109,11 +125,12 @@ const StageConfigurationPage = () => {
       </Accordion>
 
       <div className="mt-4">
-        <Button variant="dark" onClick={handleSave}>Save Configuration</Button>
+        <Button variant="dark" onClick={handleSave}>
+          Save Configuration
+        </Button>
       </div>
     </div>
   );
 };
 
 export default StageConfigurationPage;
-

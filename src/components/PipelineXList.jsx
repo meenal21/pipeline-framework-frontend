@@ -3,53 +3,16 @@ import React from "react";
 import { Table, Button, Container, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { deletePipeline, runPipeline} from "../api"; // Adjust the import path as necessary
+import { deletePipeline, fetchPipeline } from "../api"; // Adjust the import path as necessary
 
-const PipelineList = ({ pipelines }) => {
+const PipelineXList = ({ pipelines }) => {
   const navigate = useNavigate();
+  const [pipelineSel, setPipelineSel] = useState(null);
 
-  const goToPipelineDetails = (id) => {
+  const goToPipelineXDetails = (id) => {
 
-    //navigate(`/pipeline-detail/${id}`);
+    navigate(`/pipelinex-detail/${id}`);
   };
-
-  const handleRunClick = (pipeline) => {
-    runPipeline(pipeline.pid)
-      .then((response) => {
-        console.log("Run Response", response);
-        if (response) {
-          navigate(`/pipelinex-detail/${response.pxid}`);
-        } else {
-          alert("Error: Pipeline data not found");
-        }
-      })
-      .catch((error) => {
-        console.error("Error loading pipeline:", error);
-        alert("Error loading pipeline");
-      });
-  };
-
-const handleDeleteClick = (pipeline) => {
-    // Placeholder for delete logic
-
-    deletePipeline(parseInt(pipeline.pid))
-      .then((response) => { 
-        console.log("Pipeline deleted successfully:", response);
-        if(response.success === true) {
-        alert("Pipeline deleted!");
-        }
-        else {
-          alert("Error deleting pipeline");
-        }
-        // Optionally, refresh the pipeline list or remove the deleted pipeline from state
-      })
-      .catch((error) => {
-        console.error("Error deleting pipeline:", error);
-        alert("Error deleting pipeline");
-      });
-    console.log("Delete clicked for:", pipeline.pname);
-    alert(`Deleting pipeline: ${pipeline.pname}`);
-  }
 
   return (
     <Card className="p-3 w-100">
@@ -59,7 +22,7 @@ const handleDeleteClick = (pipeline) => {
           width: "90%",
           minHeight: "23.5vh", // Adjust height as per design
           overflowY: "auto",
-          paddingRight: "8px",
+          paddingRight: "16px",
         }}
       >
         <Card.Body>
@@ -71,28 +34,31 @@ const handleDeleteClick = (pipeline) => {
               <thead>
                 <tr>
                   <th>#</th>
+                  <th>Created At</th>
                   <th>Pipeline Name</th>
-                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {pipelines.map((pipeline, index) => (
                   <tr key={pipeline.pid || index}>
                     <td>{index + 1}</td>
+                    <td>
+                      {pipeline.created_at || "12th May"}
+                    </td>
                     <td
                       style={{ cursor: "pointer", color: "#0d6efd" }}
-                      onClick={() => goToPipelineDetails(pipeline.pid)}
+                      onClick={() => goToPipelineXDetails(pipeline.pxId)}
                     >
-                      {pipeline.pname || "Untitled"}
+                      {pipeline.name || "Untitled"}
                     </td>
-                    <td>
+                    {/* <td>
                       <div className="d-flex align-items-center gap-2">
                         <Button
                           size="sm"
                           variant="dark"
                           onClick={() => handleRunClick(pipeline)}
                         >
-                          Run
+                          View
                         </Button>
                         <span className="text-muted">/</span>
                         <Button
@@ -103,7 +69,7 @@ const handleDeleteClick = (pipeline) => {
                           Delete
                         </Button>
                       </div>
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
               </tbody>
@@ -115,4 +81,4 @@ const handleDeleteClick = (pipeline) => {
   );
 };
 
-export default PipelineList;
+export default PipelineXList;

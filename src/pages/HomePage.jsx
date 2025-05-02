@@ -1,15 +1,36 @@
 import { Container,Button, Row, Col, Card } from "react-bootstrap";
 import { useNavigate } from 'react-router-dom'
 import PipelineList from "../components/PipelineList";
+import { useEffect, useState } from "react";
+import { fetchPipelines } from "../api";
+import PipelineXList from "../components/PipelineXList";
 
 const HomePage = () => {
-  
+  const [pipelines, setPipelines] = useState([]);
+  const [pipelinesX, setPipelinesX] = useState([]);
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    fetchPipelines(localStorage.getItem("userId"))
+      .then((response) => {
+        console.log("Fetching dashboard data", response);
+        // Ensure response data is an array before setting state
+        setPipelines(response.pipelines || []);
+        setPipelinesX(response.pipelinesX || []);
+      })
+      .catch((error) => {
+        console.error("Error loading data:", error);
+        setPipelines([]); // Set empty array on error
+        setPipelinesX([]); // Set empty array on error
+      }); 
+  }, []);
+
+
   const handleClick = (e) =>  {
     e.preventDefault();
     navigate("/createpipeline");
-    
-};
+    };
+
   return (
     <Container fluid className="mt-4">
       <Row style={{ height: "90vh" }}>
@@ -40,15 +61,12 @@ const HomePage = () => {
           </Row>
           <Row style={{ height: "30vh" }} className="p-3"> 
             <Col>
-              <PipelineList />
+              <PipelineList pipelines={pipelines} />
             </Col>
           </Row>
           <Row style={{ height: "30vh" }} className="p-3">
             <Col>
-              <Card className="p-3 h-100 d-flex justify-content-center align-items-center">
-                <h5>Pipeline Runs</h5>
-                <p>Some content for Pipeline Runs</p>
-              </Card>
+              <PipelineXList pipelines={pipelinesX} />
             </Col>
           </Row>
         </Col>

@@ -93,5 +93,63 @@
       "dashboard_url": "",
       "alert_threshold": ""
     }
+  },
+  {
+    "id": 11,
+    "text": "Data Collection",
+    "payload": {
+      "db_connection_string": "",
+      "file_count": "",
+      "files": ""
+    }
+  }
+  ,
+  {
+    "id": 12,
+    "text": "SQL Extract",
+    "payload": {
+      "sql_file": ""
+    }
+  },
+  {
+    "id": 13,
+    "text": "SQL Transform",
+    "payload": {
+      "sql_file": ""
+    }
+  },
+  {
+    "id": 14,
+    "text": "SQL Load",
+    "payload": {
+      "sql_file": ""
+    }
+  },
+  {
+    "id": 15,
+    "text": "SQL Analysis",
+    "payload": {
+      "sql_file": ""
+    }
+  },
+  {
+    "id": 16,
+    "text": "Report Generation",
+    "payload": {
+      "input_table": "",
+      "input_file": "",
+      "output_file":""
+    }
+  },
+  {
+    "id": 17,
+    "text": "Send Email",
+    "payload": {
+      "csv_file": "",
+      "file_count": "",
+      "attachment": "",
+      "subject": "",
+      "body": ""
+    }
   }
 ]
