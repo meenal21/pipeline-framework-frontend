@@ -26,7 +26,7 @@ const AdjacencyList = ({ nodes, edges, pipeline, pipelineName, onPipelineUpdate 
         const stages = nodes.map((node) => ({
             userStageID: Number(node.id),
             stageName: node.data.label || `Stage ${node.id}`,
-            actionId: node.data.actionId || 1,
+            actionId: node.data.actid || 1,
             nextSidSuccess: dag[node.id]?.edges || [],
             nextSidFailure:  [],
             dependencies: getDependencies(node.id, edges),

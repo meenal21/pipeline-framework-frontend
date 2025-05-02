@@ -10,7 +10,7 @@ const PipelineList = ({ pipelines }) => {
 
   const goToPipelineDetails = (id) => {
 
-    //navigate(`/pipeline-detail/${id}`);
+    navigate(`/pipeline-detail/${id}`);
   };
 
   const handleRunClick = (pipeline) => {
@@ -36,7 +36,7 @@ const handleDeleteClick = (pipeline) => {
       .then((response) => { 
         console.log("Pipeline deleted successfully:", response);
         if(response.success === true) {
-        alert("Pipeline deleted!");
+        window.location.reload();
         }
         else {
           alert("Error deleting pipeline");
@@ -48,7 +48,6 @@ const handleDeleteClick = (pipeline) => {
         alert("Error deleting pipeline");
       });
     console.log("Delete clicked for:", pipeline.pname);
-    alert(`Deleting pipeline: ${pipeline.pname}`);
   }
 
   return (

@@ -21,7 +21,6 @@ import ContactUs from './pages/Contact';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 
-
 const router = createHashRouter([
   {
     path: "/",
