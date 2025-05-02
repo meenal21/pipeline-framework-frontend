@@ -57,17 +57,17 @@ const handleDeleteClick = (pipeline) => {
         className="d-flex justify-content-center align-items-center"
         style={{
           width: "90%",
-          minHeight: "23.5vh", // Adjust height as per design
-          overflowY: "auto",
+          minHeight: "23.5vh",
           paddingRight: "8px",
         }}
       >
-        <Card.Body>
+        <Card.Body >
           <Card.Title className="text-center mb-4">Saved Pipelines</Card.Title>
           {!pipelines || pipelines.length === 0 ? (
             <p className="text-muted text-center">No pipelines found</p>
           ) : (
-            <Table responsive hover size="sm" className="w-100">
+            <div style={{ maxHeight: "16vh", overflowY: "auto" }}>
+            <Table responsive hover size="sm" className="w-100" style={{ overflow: "auto" }}>
               <thead>
                 <tr>
                   <th>#</th>
@@ -108,6 +108,7 @@ const handleDeleteClick = (pipeline) => {
                 ))}
               </tbody>
             </Table>
+            </div>
           )}
         </Card.Body>
       </Container>

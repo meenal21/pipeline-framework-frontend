@@ -30,6 +30,7 @@ const PipelineXList = ({ pipelines }) => {
           {!pipelines || pipelines.length === 0 ? (
             <p className="text-muted text-center">No pipelines found</p>
           ) : (
+            <div style={{ maxHeight: "16vh", overflowY: "auto" }}>
             <Table responsive hover size="sm" className="w-100">
               <thead>
                 <tr>
@@ -74,6 +75,7 @@ const PipelineXList = ({ pipelines }) => {
                 ))}
               </tbody>
             </Table>
+            </div>
           )}
         </Card.Body>
       </Container>

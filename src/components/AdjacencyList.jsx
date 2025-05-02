@@ -13,7 +13,6 @@ const AdjacencyList = ({ nodes, edges, pipeline, pipelineName, onPipelineUpdate 
       };
     useEffect(() => {
         let adjList = {};
-        console.log(nodes)
         nodes.forEach(node => {adjList[node.id] = {
           
           name: node.data.label || `Stage ${node.id}`,
@@ -29,6 +28,7 @@ const AdjacencyList = ({ nodes, edges, pipeline, pipelineName, onPipelineUpdate 
             stageName: node.data.label || `Stage ${node.id}`,
             actionId: node.data.actionId || 1,
             nextSidSuccess: dag[node.id]?.edges || [],
+            nextSidFailure:  [],
             dependencies: getDependencies(node.id, edges),
             CFlag: node.data.CFlag || false,
             payload: node.data.payload || "{}",
