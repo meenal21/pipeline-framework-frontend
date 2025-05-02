@@ -5,29 +5,54 @@ import ReactFlow, {
     useEdgesState,
     ReactFlowProvider,
   } from "reactflow";
+  import { useMemo } from "react";
   
   const DAGGraph = ({dagJson}) => {
-  
-    const dag = useMemo(() => JSON.parse(dagJson), []);
+    const dag = useMemo(() => {
+        try {
+            return typeof dagJson === 'string' ? JSON.parse(dagJson) : dagJson;
+        } catch (error) {
+            console.error('Failed to parse DAG JSON:', error);
+            return {};
+        }
+    }, [dagJson]);
     
     const generateFlowData = () => {
-        const nodes = Object.entries(dag).map(([id, { name, position }]) => ({
-            id,
-            data: { label: name },
-            position: position || { x: Math.random() * 250, y: Math.random() * 250 }
-          }));
-  
-      const edges = Object.entries(dag).flatMap(([source, targets]) =>
-        targets.map((target) => ({
-          id: `${source}-${target}`,
-          source: source,
-          target: target.toString(),
-        }))
-      );
-  
-      return { nodes, edges };
+        const nodes = [];
+        const edges = [];
+        
+        try {
+            Object.entries(dag).forEach(([nodeId, nodeData]) => {
+                if (nodeData && typeof nodeData === 'object') {
+                    // Add node
+                    nodes.push({
+                        id: nodeId,
+                        data: { label: nodeData.name || nodeId },
+                        position: nodeData.position || { 
+                            x: Math.random() * 500, 
+                            y: Math.random() * 300 
+                        }
+                    });
+                    
+                    // Add edges if dependencies exist
+                    if (Array.isArray(nodeData.dependencies)) {
+                        nodeData.dependencies.forEach(targetId => {
+                            edges.push({
+                                id: `${nodeId}-${targetId}`,
+                                source: nodeId,
+                                target: targetId.toString()
+                            });
+                        });
+                    }
+                }
+            });
+        } catch (error) {
+            console.error('Error generating flow data:', error);
+        }
+
+        return { nodes, edges };
     };
-  
+
     const { nodes: initialNodes, edges: initialEdges } = generateFlowData();
   
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);

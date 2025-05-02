@@ -12,64 +12,139 @@ const AdjacencyList = ({ nodes, edges, pipeline, pipelineName, onPipelineUpdate 
           .map(edge => parseInt(edge.source)); // or just `edge.source` if string IDs
       };
 
-
       useEffect(() => {
         let adjList = {};
+      
+        // Initialize nodes in adjList
         nodes.forEach(node => {
           adjList[node.id] = {
             name: node.data.label || `Stage ${node.id}`,
             edges: [],
+            successEdges: [],
+            failureEdges: [],
             position: node.position,
+            type: node.type || 'action'
           };
         });
-    
+        // Fill in edges with success/failure for decision nodes
         edges.forEach(edge => {
-          adjList[edge.source].edges.push(edge.target);
+          const sourceNode = nodes.find(n => n.id === edge.source);
+          const isDecision = sourceNode?.type === 'decision';
+      
+          if (isDecision) {
+            console.log(edge.sourceHandle);
+            if (edge.sourceHandle === 'true') {
+              adjList[edge.source].successEdges.push(edge.target);
+            } else if (edge.sourceHandle === 'false') {
+              adjList[edge.source].failureEdges.push(edge.target);
+            }
+          } else {
+            adjList[edge.source].edges.push(edge.target);
+          }
         });
-    
+      
         setDag(adjList);
-    
+      
+        // Create stages array with CFlag logic
         const stages = nodes.map((node) => {
           const nodeId = node.id;
-    
-          // Step 1: Find parents of the node
-          const parents = edges
-            .filter(edge => edge.target === nodeId)
-            .map(edge => edge.source);
-    
-          // Step 2: Find grandparents by getting parents of each parent
+          const nodeType = node.type || 'action';
+      
+          // Find parents (edges pointing to this node)
+          const parents = edges.filter(edge => edge.target === nodeId).map(edge => edge.source);
+      
+          // Find grandparents (parents' parents)
           const grandparents = parents.flatMap(parentId =>
-            edges
-              .filter(edge => edge.target === parentId)
-              .map(edge => edge.source)
+            edges.filter(edge => edge.target === parentId).map(edge => edge.source)
           );
-    
-          // Step 3: Check if any grandparent has flag: true
-          const grandparentHasFlag = grandparents.some(gpId => {
+      
+          // Check if any grandparent is a decision node
+          const grandparentIsDecision = grandparents.some(gpId => {
             const gpNode = nodes.find(n => n.id === gpId);
-            return gpNode?.data?.flag === true;
+            return gpNode?.type === 'decision';
           });
-    
+      
           return {
             userStageID: Number(nodeId),
             stageName: node.data.label || `Stage ${nodeId}`,
             actionId: node.data.actid || 1,
-            nextSidSuccess: adjList[nodeId]?.edges || [],
-            nextSidFaliure: [],
-            dependencies: getDependencies(nodeId, edges),
-            CFlag: grandparentHasFlag ? true : node.data.CFlag || false, // <-- Set CFlag based on grandparent's flag
+            nextSidSuccess: nodeType === 'decision'
+              ? (adjList[nodeId]?.successEdges || [])
+              : (adjList[nodeId]?.edges || []),
+            nextSidFaliure: nodeType === 'decision'
+              ? (adjList[nodeId]?.failureEdges || [])
+              : [],
+            dependencies: parents.map(p => parseInt(p)),
+            CFlag: grandparentIsDecision,
             payload: node.data.payload || "{}",
-            payloadType: node.data.payloadType || "json",
+            payloadType: node.data.payloadType || "json"
           };
         });
-    
+      
         onPipelineUpdate((prev) => ({
           ...prev,
           pName: pipelineName,
           dag: adjList,
           stages: stages
         }));
-    }, [nodes, edges, pipelineName]);
+      }, [nodes, edges, pipelineName]);
+    //   useEffect(() => {
+    //     let adjList = {};
+    //     nodes.forEach(node => {
+    //       adjList[node.id] = {
+    //         name: node.data.label || `Stage ${node.id}`,
+    //         edges: [],
+    //         position: node.position,
+    //       };
+    //     });
+    
+    //     edges.forEach(edge => {
+    //       adjList[edge.source].edges.push(edge.target);
+    //     });
+    
+    //     setDag(adjList);
+    
+    //     const stages = nodes.map((node) => {
+    //       const nodeId = node.id;
+    
+    //       // Step 1: Find parents of the node
+    //       const parents = edges
+    //         .filter(edge => edge.target === nodeId)
+    //         .map(edge => edge.source);
+    
+    //       // Step 2: Find grandparents by getting parents of each parent
+    //       const grandparents = parents.flatMap(parentId =>
+    //         edges
+    //           .filter(edge => edge.target === parentId)
+    //           .map(edge => edge.source)
+    //       );
+    
+    //       // Step 3: Check if any grandparent has flag: true
+    //       const grandparentHasFlag = grandparents.some(gpId => {
+    //         const gpNode = nodes.find(n => n.id === gpId);
+    //         return gpNode?.data?.flag === true;
+    //       });
+    
+    //       return {
+    //         userStageID: Number(nodeId),
+    //         stageName: node.data.label || `Stage ${nodeId}`,
+    //         actionId: node.data.actid || 1,
+    //         nextSidSuccess: adjList[nodeId]?.edges || [],
+    //         nextSidFaliure: [],
+    //         dependencies: getDependencies(nodeId, edges),
+    //         CFlag: grandparentHasFlag ? true : node.data.CFlag || false, // <-- Set CFlag based on grandparent's flag
+    //         payload: node.data.payload || "{}",
+    //         payloadType: node.data.payloadType || "json",
+    //       };
+    //     });
+    
+    //     onPipelineUpdate((prev) => ({
+    //       ...prev,
+    //       pName: pipelineName,
+    //       dag: adjList,
+    //       stages: stages
+    //     }));
+    // }, [nodes, edges, pipelineName]);
     
     
     // useEffect(() => {
