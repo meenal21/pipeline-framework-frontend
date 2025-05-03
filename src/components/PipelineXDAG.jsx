@@ -18,22 +18,37 @@ const XDAGGraph = ({dagJson, pxid}) => {
 
   const getColor = (status) => {
     switch (status) {
-      case "true": return "green";
+      case true: return "green";
       default: return "white";
     }
   };
+
+
+  const getColorFail = (status) => {
+    switch (status) {
+      case true: return "lightgreen";
+      default: return "red";
+    }
+  };
   useEffect(() => {
-  
     const interval = setInterval(() => {
       (async () => {
         try {
-          const response = await polling(pxid); // array of { nodeId, status }
+          const response = await polling(pxid);
           console.log("Polling response:", response);
-          const progressMap = JSON.parse(response.pipelineProgress);
-          //Convert to map: { "1": "success", "2": "error" }
+  
+          const progressMap = JSON.parse(response.pipelineProgress); // node statuses
+          const statusMap = response.status; // pipeline-level status
+  
+          // Stop polling if pipeline is done
+          if (statusMap === "success" || statusMap === "FAILED") {
+            clearInterval(interval);
+          }
+  
           setNodes((prevNodes) =>
             prevNodes.map((node) => {
               const matchedStatus = progressMap?.[node.id];
+  
               return {
                 ...node,
                 data: {
@@ -43,7 +58,10 @@ const XDAGGraph = ({dagJson, pxid}) => {
                 style: {
                   ...node.style,
                   border: "2px solid",
-                  backgroundColor: getColor(matchedStatus),
+                  backgroundColor:
+                    statusMap === 'FAILED'
+                      ? getColorFail(matchedStatus)
+                      : getColor(matchedStatus),
                 },
               };
             })

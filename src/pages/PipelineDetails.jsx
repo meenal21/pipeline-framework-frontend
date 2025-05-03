@@ -31,7 +31,7 @@ const PipelineDetails = () => {
           
         {/* <pre>{JSON.stringify(pipeline, null, 2)}</pre>  */}
         
-        <PipelineDAG dagJson={pipeline.dag}/>
+        <PipelineDAG pipeline={pipeline} id = {id}/>
         </div>
       ) : (
         <p>No pipeline found with ID {id}</p>

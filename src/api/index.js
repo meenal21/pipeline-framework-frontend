@@ -143,3 +143,12 @@ export const polling = async (pxId) => {
   }
   return res.json();
 }
+
+export const updatePipeline = async (pipelineData) => {
+  const res = await fetch(`${BASE_URL}/update-stages`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(pipelineData)
+  });
+  return res.json();
+};
