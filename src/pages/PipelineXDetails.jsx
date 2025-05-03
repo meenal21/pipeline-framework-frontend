@@ -36,7 +36,7 @@ const PipelineDetails = () => {
       {pipeline ? (
         <div>
           <h3 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Pipeline: {pipeline.name}</h3>
-          <h4 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}> Status: {pipeline.status}</h4>
+          
           <XDAGGraph dagJson={pipeline.dag} pxid = {id} />
         </div>
       ) : (

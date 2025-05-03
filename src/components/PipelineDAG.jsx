@@ -5,11 +5,10 @@ import ReactFlow, {
   useEdgesState,
   ReactFlowProvider,
 } from 'reactflow';
-import { useMemo, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Form, Row, Col, Button, Container } from 'react-bootstrap';
 import { updatePipeline } from '../api';
 import { useNavigate } from 'react-router-dom';
-
 
 const DAGGraph = ({ pipeline, id }) => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -17,6 +16,7 @@ const DAGGraph = ({ pipeline, id }) => {
   const [formData, setFormData] = useState({});
   const [payloadToSave, setPayloadToSave] = useState(null);
   const navigate = useNavigate();
+
   const dag = useMemo(() => {
     try {
       return typeof pipeline.dag === 'string' ? JSON.parse(pipeline.dag) : pipeline.dag;
@@ -26,21 +26,51 @@ const DAGGraph = ({ pipeline, id }) => {
     }
   }, [pipeline]);
 
+  // Memoize parsedPayload to avoid recalculating on each render
+  const parsedPayload = useMemo(() => {
+    if (!selectedNode) return null;
+
+    const stage = pipeline.stages.find(s => s.userStageId.toString() === selectedNode.id);
+    try {
+      return stage ? JSON.parse(stage.payload || '{}') : null;
+    } catch (e) {
+      console.error("Failed to parse payload:", e);
+      return null;
+    }
+  }, [selectedNode, pipeline]);
+
+  useEffect(() => {
+    if (selectedNode && parsedPayload) {
+      const current = formData[selectedNode.id];
+      const hasChanges =
+        !current ||
+        Object.entries(parsedPayload).some(([key, val]) => current[key] !== val);
+
+      if (hasChanges) {
+        setFormData(prev => ({
+          ...prev,
+          [selectedNode.id]: {
+            ...parsedPayload,
+            ...prev[selectedNode.id],
+          },
+        }));
+      }
+    }
+  }, [selectedNode, parsedPayload]);
+
   const mappedStages = Object.keys(dag).map(dagKey => {
-    // Find the corresponding stage by userStageId directly using a loop or by indexing
-    const stage = pipeline.stages.filter(stage => stage.userStageId === parseInt(dagKey))[0]; // Getting the first matching stage
-    
+    const stage = pipeline.stages.filter(stage => stage.userStageId === parseInt(dagKey))[0];
     if (stage) {
-      //console.log('Mapped Stage:', stage);
       return {
-        ...dag[dagKey], // Add the dag node information
-        stage // Add the corresponding stage information
+        ...dag[dagKey],
+        stage,
       };
     } else {
       console.error(`No stage found for DAG node ID ${dagKey}`);
-      return dag[dagKey]; // Return the DAG node if no corresponding stage is found
+      return dag[dagKey];
     }
   });
+
   const generateFlowData = () => {
     const nodes = [];
     const edges = [];
@@ -48,49 +78,41 @@ const DAGGraph = ({ pipeline, id }) => {
     try {
       Object.entries(dag).forEach(([nodeId, nodeData]) => {
         if (nodeData && typeof nodeData === 'object') {
-
-          // Add node
           nodes.push({
             id: nodeId,
-            data: { label: nodeData.name || nodeId , type: nodeData.type || 'action', ...nodeData},
-            position: nodeData.position || {
-              x: Math.random() * 500,
-              y: Math.random() * 300,
-            },
+            data: { label: nodeData.name || nodeId, type: nodeData.type || 'action', ...nodeData },
+            position: nodeData.position || { x: Math.random() * 500, y: Math.random() * 300 },
           });
 
-          // Add regular edges
           if (Array.isArray(nodeData.edges)) {
             nodeData.edges.forEach((targetId) => {
               edges.push({
                 id: `${nodeId}-${targetId}`,
                 source: nodeId,
                 target: targetId.toString(),
-                style: { stroke: '#000' }, // default black edge
+                style: { stroke: '#000' },
               });
             });
           }
 
-          // Add success edges for decision nodes
           if (nodeData.successEdges) {
             nodeData.successEdges.forEach((targetId) => {
               edges.push({
                 id: `${nodeId}-success-${targetId}`,
                 source: nodeId,
                 target: targetId.toString(),
-                style: { stroke: '#22c55e' }, // green edge for success
+                style: { stroke: '#22c55e' },
               });
             });
           }
 
-          // Add failure edges for decision nodes
           if (nodeData.failureEdges) {
             nodeData.failureEdges.forEach((targetId) => {
               edges.push({
                 id: `${nodeId}-failure-${targetId}`,
                 source: nodeId,
                 target: targetId.toString(),
-                style: { stroke: '#ef4444' }, // red edge for failure
+                style: { stroke: '#ef4444' },
               });
             });
           }
@@ -110,35 +132,35 @@ const DAGGraph = ({ pipeline, id }) => {
 
   const handleSaveStage = () => {
     const payload = {
-      pid: id, // assuming you have pipeline.pid
-      stages: formData
+      pid: id,
+      stages: formData,
     };
-    setPayloadToSave(payload); // store it in state
+    setPayloadToSave(payload);
     setModalOpen(false);
-  }
+  };
+
   const handleSubmit = () => {
-    if (payloadToSave){
+    if (payloadToSave) {
       updatePipeline(payloadToSave)
         .then((res) => {
-            if (res.status === 200) {
-                alert("pipeline updated successfully")  // return the parsed JSON
-            } 
+          if (res.status === 200) {
+            alert('Pipeline updated successfully');
+          }
         })
         .catch((err) => {
-            console.error("Pipeline Update failed:", err);
+          console.error('Pipeline Update failed:', err);
         });
-      navigate('/home')
+      navigate('/home');
     }
-   }
+  };
+
   const renderModalContent = () => {
     return (
       <div>
         <Container>
           {mappedStages
-            .filter(stage => stage.stage.userStageId == selectedNode.id)
+            .filter((stage) => stage.stage.userStageId == selectedNode.id)
             .map((stage, index) => {
-              const parsedPayload = JSON.parse(stage.stage.payload || '{}');
-
               return (
                 <div key={index}>
                   <h5 className="mb-3">{stage.stage.name}</h5>
@@ -154,45 +176,49 @@ const DAGGraph = ({ pipeline, id }) => {
                             value={formData[selectedNode.id]?.[key] ?? ''}
                             placeholder={`Enter ${key}`}
                             onChange={(e) => {
-                              setFormData(prev => ({
+                              setFormData((prev) => ({
                                 ...prev,
                                 [selectedNode.id]: {
                                   ...prev[selectedNode.id],
                                   [key]: e.target.value,
-                                }
+                                },
                               }));
                             }}
                           />
                         </Col>
                       </Form.Group>
                     ))}
-                    </Form>
-
+                  </Form>
                 </div>
               );
             })}
 
-            <Button variant= 'dark'  className="me-2" onClick={() => handleSaveStage()}>Save</Button>
-        
-            <Button variant= 'dark' onClick={() => setModalOpen(false)}>Close</Button>
+          <Button variant="dark" className="me-2" onClick={() => handleSaveStage()}>
+            Save
+          </Button>
+
+          <Button variant="dark" onClick={() => setModalOpen(false)}>
+            Close
+          </Button>
         </Container>
       </div>
     );
   };
+
   return (
     <div style={{ height: '900px' }}>
       <Button
-      variant="dark"
-      style={{
-        position: 'absolute',
-        top: '72px',
-        right: '20px',
-        zIndex: 1000,
-      }}
-      onClick={() => handleSubmit()}
-    >
-      Update
-    </Button>
+        variant="dark"
+        style={{
+          position: 'absolute',
+          top: '72px',
+          right: '20px',
+          zIndex: 1000,
+        }}
+        onClick={() => handleSubmit()}
+      >
+        Update
+      </Button>
       <ReactFlowProvider>
         <ReactFlow
           nodes={nodes}
@@ -203,24 +229,29 @@ const DAGGraph = ({ pipeline, id }) => {
           elementsSelectable={false}
           nodesConnectable={false}
           fitView
-           onNodeDoubleClick={(event, node) => {
+          onNodeDoubleClick={(event, node) => {
             setSelectedNode(node);
             setModalOpen(true);
-          }}>
+          }}
+        >
           <Controls />
           <Background color="#aaa" gap={16} />
         </ReactFlow>
       </ReactFlowProvider>
-      
-       {/* Modal */}
-       {modalOpen && selectedNode && (
+
+      {/* Modal */}
+      {modalOpen && selectedNode && (
         <div
           style={{
             position: 'absolute',
-            top: 0, left: 0,
-            width: '100%', height: '100%',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
             backgroundColor: 'rgba(0,0,0,0.3)',
-            display: 'flex', justifyContent: 'center', alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
             zIndex: 1000,
           }}
         >
@@ -237,8 +268,6 @@ const DAGGraph = ({ pipeline, id }) => {
         </div>
       )}
     </div>
-
-    
   );
 };
 

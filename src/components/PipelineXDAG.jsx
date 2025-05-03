@@ -5,7 +5,7 @@ import ReactFlow, {
   useEdgesState,
   ReactFlowProvider,
 } from "reactflow";
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useState } from "react";
 import "reactflow/dist/style.css";
 import { polling } from "../api";
 
@@ -15,10 +15,10 @@ const XDAGGraph = ({dagJson, pxid}) => {
   //  '{"1":{"name":"Transform Action","edges":["2"]},"2":{"name":"Transform Action","edges":[]}}';
 
   const dag = useMemo(() => JSON.parse(dagJson), []);
-
+  const [someState, setSomeState] = useState(null);
   const getColor = (status) => {
     switch (status) {
-      case true: return "green";
+      case true: return "lightgreen";
       default: return "white";
     }
   };
@@ -27,9 +27,10 @@ const XDAGGraph = ({dagJson, pxid}) => {
   const getColorFail = (status) => {
     switch (status) {
       case true: return "lightgreen";
-      default: return "red";
+      default: return "lightred";
     }
   };
+  
   useEffect(() => {
     const interval = setInterval(() => {
       (async () => {
@@ -39,7 +40,7 @@ const XDAGGraph = ({dagJson, pxid}) => {
   
           const progressMap = JSON.parse(response.pipelineProgress); // node statuses
           const statusMap = response.status; // pipeline-level status
-  
+          setSomeState(statusMap);
           // Stop polling if pipeline is done
           if (statusMap === "success" || statusMap === "FAILED") {
             clearInterval(interval);
@@ -70,10 +71,12 @@ const XDAGGraph = ({dagJson, pxid}) => {
           console.error("Polling failed:", err);
         }
       })();
-    }, 5000);
+    }, 100);
   
     return () => clearInterval(interval);
   }, []);
+
+  
 
   const generateFlowData = () => {
     const nodes = Object.entries(dag).map(([id, { name, position }]) => ({
@@ -103,6 +106,7 @@ const XDAGGraph = ({dagJson, pxid}) => {
 
   return (
     <div style={{ height: "900px" }}>
+      <h4 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}> Status: {someState}</h4>
       <ReactFlowProvider>
         <ReactFlow
           nodes={nodes}
