@@ -21,16 +21,17 @@ const Login = ({onSuccess, toggleSignup}) => {
                     
                 })
                 .then((data) => {
+                    console.log(data);
                     // add if data.message exists then error!
-                    localStorage.setItem("auth", true);
+                    // localStorage.setItem("auth", true);
                     localStorage.setItem("token", data.token);
                     localStorage.setItem("userId", data.user.userId);
-                    localStorage.setItem("pipelineList", JSON.stringify(data.pipelines));
-                    localStorage.setItem("pipelineListx", JSON.stringify(data.pipelinesX));
-                    
-                    onSuccess();
+                    // localStorage.setItem("pipelineList", JSON.stringify(data.pipelines));
+                    // localStorage.setItem("pipelineListx", JSON.stringify(data.pipelinesX));
                     localStorage.setItem('user', JSON.stringify(data.user));
-                    //window.location.reload();
+                    onSuccess();
+                    // 
+                    window.location.reload();
                     console.log("Login successful:", data);
                 })
                 .catch((err) => {

@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { useEffect, useState } from 'react';
+import { MdToken } from 'react-icons/md';
 
 const NavbarCustom = () => {
     const [loggedIn, setLoggedIn] = useState(false);
@@ -9,6 +10,7 @@ const NavbarCustom = () => {
     useEffect(() => {
         const checkLoginStatus = () => {
             const token = localStorage.getItem("token");
+            console.log(token);
             setLoggedIn(!!token);
         };
         checkLoginStatus();

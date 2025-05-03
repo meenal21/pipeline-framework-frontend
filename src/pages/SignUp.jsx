@@ -17,12 +17,10 @@ const SignUp = ({ onSuccess, toggleLogin }) => {
                 localStorage.setItem("auth", true);
                 onSuccess();
                 localStorage.setItem("token", res.token);
-                localStorage.setItem("pipelineList", res.pipelines);
-                localStorage.setItem("pipelineListx", res.pipelinesX);
                 localStorage.setItem("userId", res.user.userId);
                 console.log(res.token);
                 localStorage.setItem('user', JSON.stringify(res.user));
-                //window.location.reload(); //force reload of nav
+                window.location.reload(); //force reload of nav
         })
   }
   return (
@@ -32,7 +30,7 @@ const SignUp = ({ onSuccess, toggleLogin }) => {
         <Form.Control type="text" name="first_name" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="Enter full name" />
       </Form.Group>
       <Form.Group className="mb-3">
-        <Form.Label>First Name</Form.Label>
+        <Form.Label>Last Name</Form.Label>
         <Form.Control type="text" name="last_name" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Enter full name" />
       </Form.Group>
       <Form.Group className="mb-3">
