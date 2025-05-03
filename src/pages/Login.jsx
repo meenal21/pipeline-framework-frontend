@@ -27,9 +27,11 @@ const Login = ({onSuccess, toggleSignup}) => {
                     localStorage.setItem("userId", data.user.userId);
                     localStorage.setItem("pipelineList", JSON.stringify(data.pipelines));
                     localStorage.setItem("pipelineListx", JSON.stringify(data.pipelinesX));
-        
+                    
                     onSuccess();
-                    window.location.reload();
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    //window.location.reload();
+                    console.log("Login successful:", data);
                 })
                 .catch((err) => {
                     console.error("Login failed:", err);

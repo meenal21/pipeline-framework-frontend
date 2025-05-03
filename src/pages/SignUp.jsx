@@ -21,7 +21,8 @@ const SignUp = ({ onSuccess, toggleLogin }) => {
                 localStorage.setItem("pipelineListx", res.pipelinesX);
                 localStorage.setItem("userId", res.user.userId);
                 console.log(res.token);
-                window.location.reload(); //force reload of nav
+                localStorage.setItem('user', JSON.stringify(res.user));
+                //window.location.reload(); //force reload of nav
         })
   }
   return (

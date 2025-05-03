@@ -147,7 +147,7 @@ export const polling = async (pxId) => {
 export const updatePipeline = async (pipelineData) => {
   const res = await fetch(`${BASE_URL}/update-stages`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json' ,'Authorization': `Bearer ${localStorage.getItem('token')}` },
     body: JSON.stringify(pipelineData)
   });
   return res.json();
