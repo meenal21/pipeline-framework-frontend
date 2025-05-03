@@ -20,6 +20,7 @@ const SignUp = ({ onSuccess, toggleLogin }) => {
                 localStorage.setItem("userId", res.user.userId);
                 console.log(res.token);
                 localStorage.setItem('user', JSON.stringify(res.user));
+                onSuccess();
                 window.location.reload(); //force reload of nav
         })
   }
